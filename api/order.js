@@ -49,6 +49,7 @@ export default async function handler(req, res) {
     id,
     createdAt: new Date().toISOString(),
     status: 'nouvelle',
+    history: [{ status: 'nouvelle', at: new Date().toISOString() }],
     name,
     phone,
     wilaya,
