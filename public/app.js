@@ -1,11 +1,12 @@
 import { WILAYAS } from '/wilayas.js';
+import { t, apply, setLang, onLang, LANGS } from '/i18n.js';
 
 const PRICE = 2100;
 const MAX_QTY = 10;
 const cfg = window.HEADZ || {};
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const fmt = (n) => `${n.toLocaleString('fr-FR').replace(/ /g, ' ')} DA`;
+const fmt = (n) => `${n.toLocaleString('fr-FR').replace(/\s/g, ' ')} ${t('unit')}`;
 
 /* ---------- Pixels publicitaires (optionnels) ---------- */
 if (cfg.metaPixelId) {
@@ -36,7 +37,7 @@ function refresh() {
   });
   $('#s-qty').textContent = total;
   $('#s-total').textContent = fmt(total * PRICE);
-  $('#submit').textContent = total ? `Confirmer ma commande — ${fmt(total * PRICE)}` : 'Confirmer ma commande';
+  $('#submit').textContent = total ? t('submitTotal', { total: fmt(total * PRICE) }) : t('submit');
 }
 $$('.stepper button').forEach((btn) =>
   btn.addEventListener('click', () => {
@@ -61,11 +62,11 @@ function normPhone(v) {
 }
 function validate(d) {
   const e = {};
-  if (d.name.trim().length < 3) e.name = 'Entre ton nom complet';
-  if (!/^0[567]\d{8}$/.test(normPhone(d.phone))) e.phone = 'Numéro invalide (ex : 0555 12 34 56)';
-  if (!d.wilaya) e.wilaya = 'Choisis ta wilaya';
-  if (d.commune.trim().length < 2) e.commune = 'Entre ta commune';
-  if (!d.items.length) e.items = 'Choisis au moins un bonnet';
+  if (d.name.trim().length < 3) e.name = t('eName');
+  if (!/^0[567]\d{8}$/.test(normPhone(d.phone))) e.phone = t('ePhone');
+  if (!d.wilaya) e.wilaya = t('eWilaya');
+  if (d.commune.trim().length < 2) e.commune = t('eCommune');
+  if (!d.items.length) e.items = t('eItems');
   return e;
 }
 
@@ -104,32 +105,32 @@ form.addEventListener('submit', async (ev) => {
   }
 
   const btn = $('#submit');
-  const label = btn.textContent;
   btn.disabled = true;
-  btn.textContent = 'Envoi en cours…';
+  btn.textContent = t('sending');
   try {
     const r = await fetch('/api/order', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) {
       if (j.errors) Object.entries(j.errors).forEach(([k, v]) => setErr(k, v));
-      throw new Error(j.error || 'Erreur, réessaie.');
+      throw new Error(r.status === 400 ? t('eGen') : j.error || t('eGen'));
     }
     const value = j.total ?? items.reduce((s, i) => s + i.qty, 0) * PRICE;
     window.fbq && fbq('track', 'Purchase', { value, currency: 'DZD' });
     window.ttq && ttq.track('CompletePayment', { value, currency: 'DZD' });
-    $('#ok-name').textContent = data.name.trim().split(' ')[0];
+    $('#ok-msg').dataset.name = data.name.trim().split(' ')[0].replace(/[<>&]/g, '');
     $('#ok-id').textContent = j.id;
     $('#ok-total').textContent = fmt(value);
     form.hidden = true;
     $('.sub').hidden = true;
-    $('h2', $('.order-box')).textContent = 'Merci !';
+    $('#order-h').dataset.i18n = 'thanks';
+    apply();
     $('#success').hidden = false;
     window.confetti?.();
     $('#commander').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (err) {
-    formErr.textContent = err.message || 'Problème de connexion, réessaie.';
+    formErr.textContent = err.message || t('eGen');
     btn.disabled = false;
-    btn.textContent = label;
+    refresh();
   }
 });
 
@@ -172,3 +173,22 @@ window.confetti = () => {
     setTimeout(() => c.remove(), 5000);
   }
 };
+
+/* ---------- Langue : menu déroulant ---------- */
+const langBtn = $('#lang-btn');
+const langMenu = $('#lang-menu');
+const toggleLang = (open) => {
+  langMenu.classList.toggle('open', open);
+  langBtn.setAttribute('aria-expanded', String(open));
+};
+langBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleLang(!langMenu.classList.contains('open')); });
+langMenu.addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-lang]');
+  if (!b) return;
+  setLang(b.dataset.lang);
+  toggleLang(false);
+});
+document.addEventListener('click', () => toggleLang(false));
+document.addEventListener('keydown', (e) => e.key === 'Escape' && toggleLang(false));
+onLang(() => { refresh(); $$('.err[data-for]').forEach((el) => (el.textContent = '')); });
+apply();
