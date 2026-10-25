@@ -1,0 +1,10 @@
+{
+  "name": "headz-landing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Landing page COD HEADZ - bonnets Under Armour & Kalenji",
+  "dependencies": {
+    "@vercel/blob": "^2.0.0"
+  }
+}

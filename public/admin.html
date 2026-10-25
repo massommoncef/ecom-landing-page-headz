@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#000000">
+<title>HEADZ — Commandes</title>
+<link rel="icon" href="/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080a;--card:#12161c;--line:#232932;--ink:#f4f3ef;--mute:#97a1ad;--blue:#8fd3ff;--blue-d:#4db3f0;--ok:#4ade80;--err:#ff6b6b;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.fx{position:fixed;inset:0;z-index:-1;overflow:hidden}
+.fx i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.25;animation:drift 16s ease-in-out infinite alternate}
+.fx i:nth-child(1){width:360px;height:360px;background:#2b8fd0;top:-80px;left:-80px}
+.fx i:nth-child(2){width:300px;height:300px;background:#6c5ce7;bottom:-60px;right:-80px;animation-delay:-7s;opacity:.18}
+header.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:rgba(0,0,0,.85);backdrop-filter:blur(14px);animation:dropIn .7s var(--ease) both}
+header.bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),#fff,var(--blue),transparent);background-size:200% 100%;animation:slide 3.5s linear infinite}
+header.bar img{height:34px}
+header.bar span{font-family:'Barlow Condensed';font-weight:700;letter-spacing:.12em;color:var(--mute);text-transform:uppercase;font-size:.9rem}
+main{max-width:920px;margin:0 auto;padding:18px 16px 60px}
+h1{font-family:'Barlow Condensed';font-size:2.2rem;font-weight:800;text-transform:uppercase;margin-bottom:16px}
+input,select,button{font:inherit;color:var(--ink);border-radius:12px;border:1.5px solid var(--line);background:#0a0d11;padding:11px 14px;outline:0;transition:.2s var(--ease)}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(143,211,255,.14)}
+button{cursor:pointer;font-weight:700}
+.btn{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#07080a;border:0;box-shadow:0 8px 22px rgba(77,179,240,.28)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(77,179,240,.45)}
+.btn:active{transform:scale(.96)}
+.ghost:hover{border-color:var(--blue);color:var(--blue)}
+
+/* connexion */
+#login{margin:12vh auto 0;max-width:380px;text-align:center;display:grid;gap:14px;background:linear-gradient(180deg,#151a21,var(--card));border:1px solid var(--line);border-radius:24px;padding:32px 24px;box-shadow:0 30px 70px rgba(0,0,0,.55);animation:rise .8s var(--ease) both}
+#login img{height:52px;margin:0 auto;animation:floaty 5s ease-in-out infinite}
+#login h2{font-family:'Barlow Condensed';font-size:1.6rem;text-transform:uppercase}
+#login p{color:var(--mute);margin-top:-8px;font-size:.9rem}
+#msg{color:var(--err);min-height:1.2em;font-size:.9rem}
+.shake{animation:shake .4s}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;animation:rise .7s var(--ease) both;transition:transform .3s var(--ease),border-color .3s}
+.stat:hover{transform:translateY(-3px);border-color:var(--blue)}
+.stat:nth-child(2){animation-delay:.1s}.stat:nth-child(3){animation-delay:.2s}
+.stat small{color:var(--mute);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.stat b{display:block;font-family:'Barlow Condensed';font-size:2rem;line-height:1.1;color:var(--blue)}
+.stat.new b{color:#ffd666}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;animation:rise .7s var(--ease) .25s both}
+.tools .grow{flex:1;min-width:140px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;animation:blink 1.6s infinite}
+
+/* commandes */
+.order{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;display:grid;gap:8px;animation:rise .6s var(--ease) both;transition:transform .25s var(--ease),border-color .25s}
+.order:hover{transform:translateY(-3px);border-color:#34404d}
+.order.fresh{border-color:#ffd666;box-shadow:0 0 0 1px rgba(255,214,102,.25),0 0 28px rgba(255,214,102,.12)}
+.order header{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.id{font-family:'Barlow Condensed';font-size:1.25rem;font-weight:700;color:var(--blue);letter-spacing:.04em}
+.who{font-size:1.05rem}
+.mute{color:var(--mute);font-size:.84rem}
+.price{font-family:'Barlow Condensed';font-size:1.4rem;color:var(--blue);font-weight:700}
+.tag{padding:3px 12px;border-radius:999px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:.3s}
+.tag.nouvelle{background:#4d3c00;color:#ffd666}.tag.confirmee{background:#0b3d5c;color:var(--blue)}.tag.expediee{background:#3b2a63;color:#c3a6ff}.tag.livree{background:#0e4d2a;color:var(--ok)}.tag.annulee{background:#5c1a1a;color:#ff8a8a}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.actions a{text-decoration:none;padding:9px 14px;border-radius:12px;font-weight:700;transition:.2s var(--ease)}
+.actions a:hover{transform:translateY(-2px)}
+.call{background:#0e4d2a;color:var(--ok)}.wa{background:#12402b;color:#6ee7a0}
+.empty{text-align:center;color:var(--mute);padding:50px 0;animation:rise .6s both}
+.empty big{display:block;font-size:3rem;animation:floaty 4s ease-in-out infinite}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:#0e4d2a;color:var(--ok);padding:10px 20px;border-radius:999px;font-weight:700;transition:transform .4s var(--ease);z-index:50}
+#toast.show{transform:translate(-50%,0)}
+
+@keyframes dropIn{from{transform:translateY(-100%)}to{transform:none}}
+@keyframes slide{to{background-position:-200% 0}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes floaty{50%{transform:translateY(-8px)}}
+@keyframes drift{to{transform:translate(50px,70px) scale(1.2)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes blink{50%{opacity:.25}}
+@media(max-width:560px){.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="fx"><i></i><i></i></div>
+<header class="bar"><img src="/img/logo-headz.png" alt="HEADZ"><span>Espace commandes</span></header>
+<main>
+  <form id="login">
+    <img src="/img/logo-headz.png" alt="HEADZ">
+    <h2>Connexion</h2>
+    <p>Entre ton mot de passe pour voir les commandes.</p>
+    <input id="pw" type="password" placeholder="Mot de passe" autocomplete="current-password" required>
+    <button class="btn">Entrer</button>
+    <div id="msg" role="alert"></div>
+  </form>
+
+  <div id="app" hidden>
+    <h1>Commandes</h1>
+    <div class="stats">
+      <div class="stat"><small>Commandes</small><b id="st-n">0</b></div>
+      <div class="stat new"><small>À confirmer</small><b id="st-new">0</b></div>
+      <div class="stat"><small>Chiffre d'affaires</small><b id="st-ca">0</b></div>
+    </div>
+    <div class="tools">
+      <select id="filter" class="grow"><option value="">Tous les statuts</option><option value="nouvelle">Nouvelles</option><option value="confirmee">Confirmées</option><option value="expediee">Expédiées</option><option value="livree">Livrées</option><option value="annulee">Annulées</option></select>
+      <button class="ghost" id="refresh"><span class="dot"></span>Actualiser</button>
+      <button class="ghost" id="csv">Export CSV</button>
+      <button class="ghost" id="logout">Déconnexion</button>
+    </div>
+    <div id="list"></div>
+  </div>
+</main>
+<div id="toast"></div>
+<script>
+const LABEL={nouvelle:'Nouvelle',confirmee:'Confirmée',expediee:'Expédiée',livree:'Livrée',annulee:'Annulée'};
+let pw=sessionStorage.getItem('hz_pw')||'', orders=[], seen=new Set(JSON.parse(localStorage.getItem('hz_seen')||'[]'));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Math.round(n).toLocaleString('fr-FR').replace(/ /g,' ');
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
+function count(el,to,suffix=''){const from=Number(el.dataset.v||0);el.dataset.v=to;const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/700),e=1-Math.pow(1-p,3);el.textContent=fmt(from+(to-from)*e)+suffix;if(p<1)requestAnimationFrame(f)})(t0)}
+async function api(method,body){
+  const r=await fetch('/api/admin',{method,headers:{'content-type':'application/json','x-admin-password':pw},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error||'Erreur');
+  return j;
+}
+async function load(){
+  try{
+    orders=(await api('GET')).orders; sessionStorage.setItem('hz_pw',pw); $('#msg').textContent='';
+    $('#login').hidden=true; $('#app').hidden=false; render();
+    localStorage.setItem('hz_seen',JSON.stringify(orders.map(o=>o.id)));
+  }catch(e){
+    $('#msg').textContent=e.message; $('#login').hidden=false; $('#app').hidden=true; sessionStorage.removeItem('hz_pw');
+    const l=$('#login');l.classList.remove('shake');void l.offsetWidth;l.classList.add('shake');
+  }
+}
+function render(){
+  const f=$('#filter').value, list=orders.filter(o=>!f||o.status===f);
+  count($('#st-n'),orders.length);
+  count($('#st-new'),orders.filter(o=>o.status==='nouvelle').length);
+  count($('#st-ca'),orders.filter(o=>o.status!=='annulee').reduce((s,o)=>s+o.total,0),' DA');
+  $('#list').innerHTML=list.length?list.map((o,i)=>{
+    const wa='213'+o.phone.slice(1), fresh=o.status==='nouvelle'&&!seen.has(o.id);
+    return `<div class="order ${fresh?'fresh':''}" style="animation-delay:${Math.min(i,8)*.06}s"><header><span class="id">${esc(o.id)}</span><span class="tag ${o.status}">${LABEL[o.status]}</span></header>
+    <div class="who"><b>${esc(o.name)}</b> · ${esc(o.phone)}</div>
+    <div>📍 ${esc(o.wilaya)} — ${esc(o.commune)}</div>
+    <div>🛍 ${o.items.map(i=>`${i.qty}× ${esc(i.modelLabel)}`).join(', ')} · <span class="price">${fmt(o.total)} DA</span></div>
+    ${o.note?`<div class="mute">📝 ${esc(o.note)}</div>`:''}
+    <div class="mute">${new Date(o.createdAt).toLocaleString('fr-FR')} · source : ${esc(o.source||'?')}</div>
+    <div class="actions"><a class="call" href="tel:${esc(o.phone)}">📞 Appeler</a><a class="wa" target="_blank" rel="noopener" href="https://wa.me/${wa}">💬 WhatsApp</a>
+    <select data-id="${esc(o.id)}">${Object.entries(LABEL).map(([k,v])=>`<option value="${k}" ${k===o.status?'selected':''}>${v}</option>`).join('')}</select></div></div>`;
+  }).join(''):'<div class="empty"><big>🧢</big>Aucune commande pour le moment.</div>';
+}
+$('#list').addEventListener('change',async e=>{
+  if(!e.target.dataset.id) return;
+  try{ const {order}=await api('POST',{id:e.target.dataset.id,status:e.target.value}); orders=orders.map(o=>o.id===order.id?order:o); render(); toast('✓ Statut mis à jour'); }
+  catch(err){ alert(err.message); }
+});
+$('#login').addEventListener('submit',e=>{e.preventDefault();pw=$('#pw').value;load();});
+$('#filter').addEventListener('change',render);
+$('#refresh').addEventListener('click',async()=>{await load();toast('✓ Actualisé')});
+$('#logout').addEventListener('click',()=>{sessionStorage.removeItem('hz_pw');location.reload()});
+$('#csv').addEventListener('click',()=>{
+  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const rows=[['id','date','statut','nom','telephone','wilaya','commune','articles','total','note','source'],...orders.map(o=>[o.id,o.createdAt,o.status,o.name,o.phone,o.wilaya,o.commune,o.items.map(i=>`${i.qty}x ${i.modelLabel}`).join(' + '),o.total,o.note,o.source])];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv'}));a.download='commandes-headz.csv';a.click();
+});
+setInterval(()=>{if(pw&&!document.hidden&&!$('#app').hidden)api('GET').then(r=>{if(r.orders.length!==orders.length){orders=r.orders;render();toast('🔔 Nouvelle commande !')}}).catch(()=>{})},30000);
+if(pw) load();
+</script>
+</body>
+</html>
