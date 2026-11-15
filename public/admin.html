@@ -250,7 +250,7 @@ function renderOrders(){
     ${statusSelect(o)}</div></div>`;
   }).join(''):'<div class="empty"><big>🧢</big>Aucune commande.</div>';
 }
-const pickText=o=>`📦 ${o.id}\nClient : ${o.name}\nTél : ${o.phone}\nWilaya : ${o.wilaya}\nCommune : ${o.commune}\nAdresse / note : ${o.note||'—'}\nProduit : ${items(o)}\nÀ encaisser : ${o.total} DA (livraison gratuite)`;
+const pickText=o=>`📦 ${o.id}\nClient : ${o.name}\nTél : ${o.phone}\nWilaya : ${o.wilaya}\nCommune : ${o.commune}\nAdresse / note : ${o.note||'—'}\nProduit : ${items(o)}\nÀ encaisser : ${o.total} DA`;
 function pickCard(o,ship){
   return `<div class="order pick"><header><label class="chk">${ship?'':`<input type="checkbox" data-pick="${esc(o.id)}" ${picked.has(o.id)?'checked':''}>`}<span class="id">${esc(o.id)}</span></label><span class="tag ${o.status}">${LABEL[o.status]}</span></header>
   <div class="pickinfo">
